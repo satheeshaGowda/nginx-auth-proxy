@@ -1,5 +1,6 @@
 FROM ubuntu:trusty
 ENV DEBIAN_FRONTEND noninteractive
+MAINTAINER Stefan Liedle
 
 # nginx
 RUN apt-get update -q
@@ -8,11 +9,13 @@ RUN add-apt-repository ppa:nginx/stable
 RUN apt-get update -q
 RUN apt-get -y install -y curl
 
+ENV NGINX_VERSION 1.9.6
+
 # build nginx from source with http auth module enabled
 RUN apt-get -y install libpcre3-dev zlib1g-dev libssl-dev
-RUN curl -O http://nginx.org/download/nginx-1.6.1.tar.gz
-RUN tar -xzf nginx-1.6.1.tar.gz
-WORKDIR nginx-1.6.1
+RUN curl -O http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
+RUN tar -xzf nginx-${NGINX_VERSION}.tar.gz
+WORKDIR nginx-${NGINX_VERSION}
 RUN ./configure --with-http_ssl_module --with-http_auth_request_module && make && make install
 
 # install pystache
